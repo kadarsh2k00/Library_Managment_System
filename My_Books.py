@@ -1,5 +1,5 @@
-from tkinter import ttk,Tk,Button,Label,N,W,E,S,StringVar,Listbox,Scrollbar,END
-from tkinter import messagebox
+from tkinter import Tk,Button,Label,Listbox,Scrollbar
+from tkinter import ttk,StringVar,messagebox,N,W,E,S,END
 from Database_Config import dbconfig
 import pymysql
 
@@ -14,6 +14,42 @@ class Bookdb:
 
     def __del__(self):
         self.con.close()
+
+    def view(self):
+        command = ('select * from books')
+        self.cursor.execute(command)
+        rows = self.cursor.fetchall()
+        return rows
+
+    def insert(self,title,author,isbn):
+        command = ('INSERT INTO books(TITLE,AUTHOR,ISBN) VALUES (?,?,?)')
+        self.cursor.execute(command,[title,author,isbn])
+        self.con.commit()
+        messagebox.showinfo(title ='Book Database', message ='Book Added')
+
+    def modify(self,id,title,author,isbn):
+        command = ('UPDATE books SET TITLE = ?, AUTHOR = ?, ISBN = ? WHERE ID =?')
+        self.cursor.execute(command,[title,author,isbn,id])
+        self.con.commit()
+        messagebox.showinfo(title ='Book Database', message ='Book Modified')
+
+    def delete(self,id):
+        command = ('INSERT INTO books(TITLE,AUTHOR,ISBN) VALUES (?,?,?)')
+        self.cursor.execute(command,[id])
+        self.con.commit()
+        messagebox.showinfo(title ='Book Database', message ='Book Deleted')
+
+def get_selected_row(event):
+    global selected_tuple
+    index = list_box.curselection()[0]
+    selected_tuple = list_box.get(index)
+    title_entry.delete(0, 'end')
+    title_entry.insert('end',selected_tuple[1])
+    author_entry.delete(0,'end')
+    author_entry.insert('end',selected_tuple[2])
+    isbn_entry.delete(0,'end')
+    isbn_entry.insert('end',selected_tuple[3])
+
 
 root = Tk()
 root.title('My Books Database')
