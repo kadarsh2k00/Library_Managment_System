@@ -1,5 +1,19 @@
 from tkinter import ttk,Tk,Button,Label,N,W,E,S,StringVar,Listbox,Scrollbar,END
 from tkinter import messagebox
+from Database_Config import dbconfig
+import pymysql
+
+con = pymysql.connect(**dbconfig)
+cursor = con.cursor()
+
+class Bookdb:
+    def __init__(self):
+        self.con = pymysql.connect(**dbconfig)
+        self.cursor = con.cursor()
+        print('Conected to the Database')
+
+    def __del__(self):
+        self.con.close()
 
 root = Tk()
 root.title('My Books Database')
