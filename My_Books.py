@@ -50,12 +50,48 @@ def get_selected_row(event):
     isbn_entry.delete(0,'end')
     isbn_entry.insert('end',selected_tuple[3])
 
+def view_records():
+    list_box.delete(0, 'end')
+    for row in db.view():
+        list_box.insert('end', row)
+
+def add_book():
+    db.insert(title_text.get(), author_text.get(), isbn_text.get())
+    list_box.delete(0, 'end')
+    list_box.insert('end', (title_text.get(), author_text.get(), isbn_text.get()))
+    title_entry.delete(0, 'end')
+    author_entry.delete(0, 'end')
+    isbn_entry.delete(0, 'end')
+    con.commit()
+
+def delete_records():
+    db.delete(selected_tuple[0])
+    con.commit()
+
+def clear_screen():
+    title_entry.delete(0, 'end')
+    author_entry.delete(0, 'end')
+    isbn_entry.delete(0, 'end')
+    list_box.delete(0, 'end')
+
+def modify_record():
+    db.update(selected_tuple[0], title_text.get(), author_text.get(), isbn_text.get())
+    title_entry.delete(0, 'end')
+    author_entry.delete(0, 'end')
+    isbn_entry.delete(0, 'end')
+    con.commit()
+
+def on_closing():
+    temp = db
+    if messagebox.askokcancel('Quit', 'Do you want to quit?'):
+        root.destroy()
+        del temp
 
 root = Tk()
 root.title('My Books Database')
 root.configure(background = 'light pink')
 root.geometry('1024x720')
-#root.resizable(width=False,height=False)
+root.resizable(width=False,height=False)
 
 title_label = ttk.Label(root, text = 'TITLE', background = 'light pink', font =('TkDefaultFont', 16))
 title_label.grid(row = 0, column = 0, sticky = W, padx = 7)
