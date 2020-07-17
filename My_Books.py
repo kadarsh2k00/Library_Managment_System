@@ -22,23 +22,24 @@ class Bookdb:
         return rows
 
     def insert(self,title,author,isbn):
-        command = ('INSERT INTO books(TITLE,AUTHOR,ISBN) VALUES (?,?,?)')
+        command = ('INSERT INTO books(TITLE,AUTHOR,ISBN) VALUES (%s,%s,%s)')
         self.cursor.execute(command,[title,author,isbn])
         self.con.commit()
         messagebox.showinfo(title ='Book Database', message ='Book Added')
 
     def modify(self,id,title,author,isbn):
-        command = ('UPDATE books SET TITLE = ?, AUTHOR = ?, ISBN = ? WHERE ID =?')
+        command = ('UPDATE books SET TITLE = %s, AUTHOR = %s, ISBN = %s WHERE ID =%s')
         self.cursor.execute(command,[title,author,isbn,id])
         self.con.commit()
         messagebox.showinfo(title ='Book Database', message ='Book Modified')
 
     def delete(self,id):
-        command = ('INSERT INTO books(TITLE,AUTHOR,ISBN) VALUES (?,?,?)')
+        command = ('DELETE FROM books WHERE ID = %s')
         self.cursor.execute(command,[id])
         self.con.commit()
         messagebox.showinfo(title ='Book Database', message ='Book Deleted')
 
+db = Bookdb()
 def get_selected_row(event):
     global selected_tuple
     index = list_box.curselection()[0]
@@ -83,14 +84,14 @@ def modify_record():
 
 def on_closing():
     temp = db
-    if messagebox.askokcancel('Quit', 'Do you want to quit?'):
+    if messagebox.askokcancel('Quit', 'Do you want to quit??'):
         root.destroy()
         del temp
 
 root = Tk()
 root.title('My Books Database')
 root.configure(background = 'light pink')
-root.geometry('1024x720')
+root.geometry('940x580')
 root.resizable(width=False,height=False)
 
 title_label = ttk.Label(root, text = 'TITLE', background = 'light pink', font =('TkDefaultFont', 16))
@@ -111,30 +112,30 @@ isbn_text = StringVar()
 isbn_entry = ttk.Entry(root, width = 24, textvariable = isbn_text)
 isbn_entry.grid(row = 0, column = 5, sticky = W)
 
-submit_btn = Button(root, bg ='black', fg ='white', text ='ADD', font ='helvetica 14 bold', command = '')
-submit_btn.grid(row = 0, column = 6, sticky = W, padx = 7, pady = 5)
+add_btn = Button(root, bg ='black', fg ='white', text ='ADD', font ='helvetica 14 bold', command = add_book)
+add_btn.grid(row = 0, column = 6, sticky = W, padx = 7, pady = 5)
 
 list_box = Listbox(root, height = 16, width = 40, font = 'helvetica 14 bold', bg ='light blue')
 list_box.grid(row = 5, column = 1, columnspan = 16, sticky = W + E, pady = 40, padx = 15)
-
+list_box.bind('<<ListboxSelect>>', get_selected_row)
 scroll_bar = Scrollbar(root)
 scroll_bar.grid(row = 1, column = 8, rowspan = 14, sticky = W)
 
 list_box.configure(yscrollcommand = scroll_bar.set)
 scroll_bar.configure(command = list_box.yview)
 
-view_btn = Button(root, bg ='black', fg ='white', text ='VIEW', font='helvetica 12 bold', command ='')
+view_btn = Button(root, bg ='black', fg ='white', text ='VIEW', font='helvetica 12 bold', command =view_records)
 view_btn.grid(row = 15, column = 1)
 
-delete_btn = Button(root, bg ='black', fg ='white', text ='DELETE', font='helvetica 12 bold', command ='')
+delete_btn = Button(root, bg ='black', fg ='white', text ='DELETE', font='helvetica 12 bold', command =delete_records)
 delete_btn.grid(row = 15, column = 2)
 
-modify_btn = Button(root, bg ='black', fg ='white', text ='MODIFY', font='helvetica 12 bold', command ='')
+modify_btn = Button(root, bg ='black', fg ='white', text ='MODIFY', font='helvetica 12 bold', command =modify_record)
 modify_btn.grid(row = 15, column = 3)
 
-clear_btn = Button(root, bg ='black', fg ='white', text ='CLEAR', font='helvetica 12 bold', command ='')
+clear_btn = Button(root, bg ='black', fg ='white', text ='CLEAR', font='helvetica 12 bold', command =clear_screen)
 clear_btn.grid(row = 15, column = 4)
 
-exit_btn = Button(root, bg ='black', fg ='white', text ='EXIT', font='helvetica 12 bold', command ='')
+exit_btn = Button(root, bg ='black', fg ='white', text ='EXIT', font='helvetica 12 bold', command =on_closing)
 exit_btn.grid(row = 15, column = 5)
 root.mainloop()
