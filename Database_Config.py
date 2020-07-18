@@ -2,7 +2,7 @@ dbconfig = {
 
         'host':'localhost',
         'user':'root',
-        'password':'lenovo@330',
+        'password':'<password>',
         'database':'mybooks'
 
 }
