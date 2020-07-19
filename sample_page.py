@@ -1,3 +1,5 @@
+#table_name - books
+
 from tkinter import Tk,Button,Label,Listbox,Scrollbar
 from tkinter import ttk,StringVar,messagebox,N,W,E,S,END
 from Database_Config import dbconfig
