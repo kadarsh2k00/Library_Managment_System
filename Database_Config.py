@@ -3,6 +3,6 @@ dbconfig = {
         'host':'localhost',
         'user':'root',
         'password':'<password>',
-        'database':'mybooks'
+        'database':'<name_of_database>'
 
 }
